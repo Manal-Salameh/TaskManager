@@ -6,6 +6,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
@@ -58,6 +60,10 @@ public class TaskManagerAdapter extends RecyclerView.Adapter<TaskManagerAdapter.
         return myDoes.size();
     }
 
+    public MyDoes getMyDoesAt (int position) {
+       return myDoes.get(position);
+    }
+
     class MyViewHolder extends RecyclerView.ViewHolder {
 
        TextView titledoes, descdoes, datedoes, keydoes;
@@ -71,4 +77,6 @@ public class TaskManagerAdapter extends RecyclerView.Adapter<TaskManagerAdapter.
         }
 
     }
+
+
 }

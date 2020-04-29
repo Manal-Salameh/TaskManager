@@ -2,6 +2,8 @@ package com.example.taskmanager;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -61,6 +63,8 @@ public class EditTaskDesc extends AppCompatActivity {
                 });
             }
         });
+
+
 
 
         btnSaveUpdate.setOnClickListener(new View.OnClickListener() {

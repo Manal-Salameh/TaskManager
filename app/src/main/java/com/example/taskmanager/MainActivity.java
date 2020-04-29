@@ -1,5 +1,6 @@
 package com.example.taskmanager;
 
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.database.DataSnapshot;
@@ -44,26 +46,20 @@ public class MainActivity extends AppCompatActivity {
         btnAddNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent a = new Intent( MainActivity.this, NewTaskAct.class);
+                Intent a = new Intent(MainActivity.this, NewTaskAct.class);
                 startActivity(a);
             }
         });
-
-
-
         ourdoes = findViewById(R.id.ourdoes);
-        ourdoes.setLayoutManager(new LinearLayoutManager (this));
+        ourdoes.setLayoutManager(new LinearLayoutManager(this));
         list = new ArrayList<MyDoes>();
-        //taskManagerAdapter = new TaskManagerAdapter(this, list);
-        //ourdoes.setAdapter(taskManagerAdapter);
 
         reference = FirebaseDatabase.getInstance().getReference().child("TaskManager");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren())
-                {
+                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     MyDoes p = dataSnapshot1.getValue(MyDoes.class);
                     list.add(p);
                 }
@@ -78,5 +74,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                list.remove(taskManagerAdapter.getMyDoesAt(viewHolder.getAdapterPosition()));
+                Toast.makeText(MainActivity.this, "Task Deleted", Toast.LENGTH_SHORT).show();
+            }
+        }).attachToRecyclerView(ourdoes);
+
     }
+
 }
